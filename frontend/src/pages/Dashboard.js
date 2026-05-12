@@ -8,16 +8,22 @@ import { useAuth } from "../context/AuthContext";
 
 const StatCard = ({ label, value, tone }) => {
   const tones = {
-    slate: "border-slate-200 bg-white text-slate-950",
-    green: "border-emerald-200 bg-emerald-50 text-emerald-800",
-    blue: "border-sky-200 bg-sky-50 text-sky-800",
-    red: "border-rose-200 bg-rose-50 text-rose-800"
+    slate: "from-slate-400/20 to-slate-400/5 text-white",
+    green: "from-emerald-400/20 to-emerald-400/5 text-emerald-400",
+    blue: "from-sky-400/20 to-sky-400/5 text-sky-400",
+    red: "from-rose-400/20 to-rose-400/5 text-rose-400"
   };
 
   return (
-    <div className={`rounded-md border p-5 shadow-sm ${tones[tone]}`}>
-      <p className="text-sm font-semibold opacity-75">{label}</p>
-      <p className="mt-2 text-3xl font-bold">{value}</p>
+    <div className={`stat-card relative overflow-hidden group`}>
+      <div className={`absolute -right-4 -top-4 h-24 w-24 rounded-full bg-gradient-to-br opacity-20 blur-2xl ${tones[tone]}`} />
+      <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">{label}</p>
+      <p className="mt-3 stat-card-value">{value}</p>
+      <div className="mt-4 flex items-center gap-2">
+        <span className="h-1 w-full rounded-full bg-white/5 overflow-hidden">
+          <span className={`block h-full rounded-full bg-gradient-to-r ${tones[tone]} w-2/3`} />
+        </span>
+      </div>
     </div>
   );
 };
@@ -105,32 +111,46 @@ const Dashboard = () => {
         </div>
       </section>
 
-      <section className="mt-6">
+      <section className="mt-10">
         {tasks.length === 0 ? (
           <EmptyState title="No tasks found" message="Tasks matching the selected filters will appear here." />
         ) : (
-          <div className="overflow-hidden rounded-md border border-slate-200 bg-white shadow-soft">
+          <div className="table-container shadow-2xl shadow-black/20">
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-slate-200 text-sm">
-                <thead className="bg-slate-50 text-left text-xs font-bold uppercase tracking-wide text-slate-500">
+              <table className="min-w-full divide-y divide-white/5 text-sm">
+                <thead className="bg-white/[0.03] text-left text-[10px] font-black uppercase tracking-widest text-slate-500">
                   <tr>
-                    <th className="px-4 py-3">Task</th>
-                    <th className="px-4 py-3">Project</th>
-                    <th className="px-4 py-3">Assignee</th>
-                    <th className="px-4 py-3">Priority</th>
-                    <th className="px-4 py-3">Status</th>
-                    <th className="px-4 py-3">Due</th>
+                    <th className="px-6 py-4">Task Information</th>
+                    <th className="px-6 py-4">Project</th>
+                    <th className="px-6 py-4">Assignee</th>
+                    <th className="px-6 py-4">Priority</th>
+                    <th className="px-6 py-4">Current Status</th>
+                    <th className="px-6 py-4">Target Date</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-white/5">
                   {tasks.map((task) => (
-                    <tr key={task._id} className={task.status === "Overdue" ? "bg-red-50" : "bg-white"}>
-                      <td className="px-4 py-3 font-semibold text-slate-900">{task.title}</td>
-                      <td className="px-4 py-3 text-slate-600">{task.project?.name}</td>
-                      <td className="px-4 py-3 text-slate-600">{task.assignedTo?.name}</td>
-                      <td className="px-4 py-3"><Badge type="priority" value={task.priority} /></td>
-                      <td className="px-4 py-3"><Badge value={task.status} /></td>
-                      <td className="px-4 py-3 text-slate-600">{new Date(task.dueDate).toLocaleDateString()}</td>
+                    <tr key={task._id} className="table-row">
+                      <td className="px-6 py-5">
+                        <div className="font-bold text-white">{task.title}</div>
+                        <div className="mt-1 text-xs text-slate-500 line-clamp-1">{task.description}</div>
+                      </td>
+                      <td className="px-6 py-5">
+                        <span className="rounded-lg bg-white/5 px-2.5 py-1 text-xs font-bold text-slate-300 ring-1 ring-white/10">
+                          {task.project?.name}
+                        </span>
+                      </td>
+                      <td className="px-6 py-5">
+                        <div className="flex items-center gap-2">
+                          <div className="h-7 w-7 rounded-lg bg-sky-500/10 flex items-center justify-center text-[10px] font-black text-sky-400 border border-sky-500/20">
+                            {task.assignedTo?.name?.charAt(0)}
+                          </div>
+                          <span className="font-medium text-slate-300">{task.assignedTo?.name}</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-5"><Badge type="priority" value={task.priority} /></td>
+                      <td className="px-6 py-5"><Badge value={task.status} /></td>
+                      <td className="px-6 py-5 font-mono text-xs text-slate-400">{new Date(task.dueDate).toLocaleDateString()}</td>
                     </tr>
                   ))}
                 </tbody>

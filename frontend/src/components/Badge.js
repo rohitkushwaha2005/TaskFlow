@@ -1,20 +1,16 @@
-const statusColors = {
-  Todo: "bg-slate-100 text-slate-700 ring-slate-200",
-  "In Progress": "bg-blue-50 text-blue-700 ring-blue-200",
-  Done: "bg-green-50 text-green-700 ring-green-200",
-  Overdue: "bg-red-50 text-red-700 ring-red-200"
-};
-
-const priorityColors = {
-  Low: "bg-emerald-50 text-emerald-700 ring-emerald-200",
-  Medium: "bg-amber-50 text-amber-700 ring-amber-200",
-  High: "bg-rose-50 text-rose-700 ring-rose-200"
-};
-
 const Badge = ({ type = "status", value }) => {
-  const colorMap = type === "priority" ? priorityColors : statusColors;
+  const styles = {
+    Todo: "bg-slate-500/10 text-slate-400 border-slate-500/20",
+    "In Progress": "bg-sky-500/10 text-sky-400 border-sky-500/20",
+    Done: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+    Overdue: "bg-rose-500/10 text-rose-400 border-rose-500/20",
+    Low: "bg-slate-500/10 text-slate-400 border-slate-500/20",
+    Medium: "bg-amber-500/10 text-amber-400 border-amber-500/20",
+    High: "bg-rose-500/10 text-rose-400 border-rose-500/20"
+  };
+
   return (
-    <span className={`inline-flex rounded-md px-2 py-1 text-xs font-bold ring-1 ${colorMap[value] || "bg-slate-100 text-slate-700 ring-slate-200"}`}>
+    <span className={`inline-flex items-center rounded-lg border px-2 py-0.5 text-[10px] font-black uppercase tracking-widest ${styles[value] || "bg-slate-500/10 text-slate-400 border-slate-500/20"}`}>
       {value}
     </span>
   );

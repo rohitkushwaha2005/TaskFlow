@@ -81,15 +81,15 @@ const Projects = () => {
 
   return (
     <>
-      <section className="mb-6 grid overflow-hidden rounded-md border border-slate-200 bg-white shadow-soft lg:grid-cols-[1.1fr_0.9fr]">
-        <div className="p-6">
-          <p className="text-xs font-bold uppercase tracking-wide text-slate-500">Project portfolio</p>
-          <h1 className="mt-2 text-2xl font-bold text-slate-950">Build a cleaner operating rhythm</h1>
-          <p className="mt-3 text-sm leading-6 text-slate-600">Keep every project connected to the people responsible for the work, then assign tasks only to the right team members.</p>
+      <section className="mb-10 grid overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 shadow-2xl lg:grid-cols-[1.1fr_0.9fr]">
+        <div className="p-10">
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-sky-500">Project portfolio</p>
+          <h1 className="mt-3 text-4xl font-black tracking-tight text-white leading-tight">Build a cleaner <br/>operating rhythm</h1>
+          <p className="mt-4 text-sm font-medium leading-relaxed text-slate-400">Keep every project connected to the people responsible for the work, then assign tasks only to the right team members.</p>
         </div>
         <div
-          className="hidden min-h-48 bg-cover bg-center lg:block"
-          style={{ backgroundImage: "linear-gradient(90deg, rgba(255,255,255,0.1), rgba(15,23,42,0.2)), url('https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1200&q=80')" }}
+          className="hidden min-h-64 bg-cover bg-center lg:block grayscale hover:grayscale-0 transition-all duration-700"
+          style={{ backgroundImage: "linear-gradient(90deg, rgba(2,6,23,1), rgba(2,6,23,0.4)), url('https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1200&q=80')" }}
         />
       </section>
 
@@ -100,11 +100,11 @@ const Projects = () => {
       />
 
       {isAdmin && (
-        <form onSubmit={createProject} className="mb-6 rounded-md border border-slate-200 bg-white/90 p-4 shadow-sm backdrop-blur">
-          <div className="grid gap-3 md:grid-cols-[1fr_2fr_auto]">
+        <form onSubmit={createProject} className="mb-10 rounded-2xl border border-white/10 bg-white/[0.03] p-5 shadow-inner">
+          <div className="grid gap-4 md:grid-cols-[1.5fr_2.5fr_auto]">
             <input className="form-input" placeholder="Project name" value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} required />
-            <input className="form-input" placeholder="Project description" value={form.description} onChange={(event) => setForm({ ...form, description: event.target.value })} required />
-            <button className="btn-primary" type="submit" disabled={saving}>{saving ? "Creating..." : "Create Project"}</button>
+            <input className="form-input" placeholder="What's the core mission?" value={form.description} onChange={(event) => setForm({ ...form, description: event.target.value })} required />
+            <button className="btn-primary px-8" type="submit" disabled={saving}>{saving ? "Creating..." : "Launch Project"}</button>
           </div>
         </form>
       )}
@@ -114,45 +114,54 @@ const Projects = () => {
       ) : (
         <div className="grid gap-4 xl:grid-cols-2">
           {projects.map((project) => (
-            <article key={project._id} className="overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm">
-              <div className="h-2" style={{ background: "linear-gradient(90deg, var(--accent), var(--accent-dark))" }} />
-              <div className="p-5">
+            <article key={project._id} className="glass-card flex flex-col rounded-3xl p-6">
               <div className="flex items-start justify-between gap-4">
-                <div>
-                  <h2 className="text-lg font-bold text-slate-950">{project.name}</h2>
-                  <p className="mt-1 text-sm text-slate-600">{project.description}</p>
+                <div className="flex-1">
+                  <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-sky-400 to-indigo-600 flex items-center justify-center text-sm font-black text-white shadow-lg">
+                      {project.name.charAt(0)}
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-black text-white tracking-tight">{project.name}</h2>
+                      <p className="mt-1 text-xs font-medium text-slate-500">Created by {project.createdBy?.name}</p>
+                    </div>
+                  </div>
+                  <p className="mt-4 text-sm font-medium leading-relaxed text-slate-400">{project.description}</p>
                 </div>
-                {isAdmin && <button className="btn-danger" type="button" onClick={() => deleteProject(project._id)}>Delete</button>}
+                {isAdmin && (
+                  <button className="rounded-xl p-2 text-slate-500 transition-colors hover:bg-rose-500/10 hover:text-rose-500" type="button" onClick={() => deleteProject(project._id)}>
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                  </button>
+                )}
               </div>
 
-              <div className="mt-5">
-                <p className="text-xs font-bold uppercase tracking-wide text-slate-500">Members</p>
-                <div className="mt-2 flex flex-wrap gap-2">
+              <div className="mt-8 border-t border-white/5 pt-6">
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Active Workforce</p>
+                <div className="mt-4 flex flex-wrap gap-2">
                   {project.members?.length ? project.members.map((member) => (
-                    <span key={member._id} className="inline-flex items-center gap-2 rounded-md bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-700">
-                      {member.name} ({member.email})
+                    <span key={member._id} className="inline-flex items-center gap-2 rounded-xl bg-white/5 px-3 py-1.5 text-xs font-bold text-slate-300 ring-1 ring-white/10 group/member">
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                      {member.name}
                       {isAdmin && (
                         <button
                           type="button"
-                          className="font-bold text-slate-500 hover:text-red-600"
+                          className="ml-1 opacity-0 group-hover/member:opacity-100 transition-opacity text-slate-500 hover:text-rose-500"
                           onClick={() => removeMember(project._id, member._id)}
-                          aria-label={`Remove ${member.name}`}
                         >
-                          x
+                          <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                         </button>
                       )}
                     </span>
-                  )) : <span className="text-sm text-slate-500">No members added</span>}
+                  )) : <span className="text-xs font-medium text-slate-500">No workforce assigned</span>}
                 </div>
               </div>
 
               {isAdmin && (
-                <div className="mt-5 grid gap-2 sm:grid-cols-[1fr_auto]">
-                  <input className="form-input" type="email" placeholder="member@email.com" value={memberEmails[project._id] || ""} onChange={(event) => setMemberEmails({ ...memberEmails, [project._id]: event.target.value })} />
-                  <button className="btn-secondary" type="button" onClick={() => addMember(project._id)}>Add Member</button>
+                <div className="mt-8 flex gap-2">
+                  <input className="form-input" type="email" placeholder="Add via email..." value={memberEmails[project._id] || ""} onChange={(event) => setMemberEmails({ ...memberEmails, [project._id]: event.target.value })} />
+                  <button className="btn-secondary px-4 py-2" type="button" onClick={() => addMember(project._id)}>+</button>
                 </div>
               )}
-              </div>
             </article>
           ))}
         </div>

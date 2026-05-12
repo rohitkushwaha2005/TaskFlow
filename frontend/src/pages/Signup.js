@@ -27,37 +27,41 @@ const Signup = () => {
   };
 
   return (
-    <main className="auth-visual flex min-h-screen items-center justify-center px-4 py-10">
-      <section className="w-full max-w-md rounded-md bg-white/95 p-8 shadow-soft backdrop-blur">
+    <main className="auth-visual relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-10">
+      <div className="absolute h-96 w-96 rounded-full bg-violet-500/20 blur-[120px] animate-pulse" />
+
+      <section className="glass-panel relative w-full max-w-md rounded-3xl p-10 shadow-2xl">
         <BrandLogo />
-        <h1 className="mt-2 text-2xl font-bold text-slate-950">Create your account</h1>
-        <p className="mt-2 text-sm text-slate-600">Choose a role and start organizing project work in minutes.</p>
-        <form onSubmit={handleSubmit} className="mt-8 space-y-4">
-          <label className="block">
-            <span className="text-sm font-semibold text-slate-700">Name</span>
-            <input className="form-input mt-1" value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} required />
-          </label>
-          <label className="block">
-            <span className="text-sm font-semibold text-slate-700">Email</span>
-            <input className="form-input mt-1" type="email" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} required />
-          </label>
-          <label className="block">
-            <span className="text-sm font-semibold text-slate-700">Password</span>
-            <input className="form-input mt-1" type="password" minLength="6" value={form.password} onChange={(event) => setForm({ ...form, password: event.target.value })} required />
-          </label>
-          <label className="block">
-            <span className="text-sm font-semibold text-slate-700">Role</span>
-            <select className="form-input mt-1" value={form.role} onChange={(event) => setForm({ ...form, role: event.target.value })}>
+        <h1 className="mt-8 text-3xl font-black tracking-tight text-white">Join the workspace</h1>
+        <p className="mt-3 text-sm font-medium text-slate-400">Create your account and start orchestrating team work with clarity.</p>
+        
+        <form onSubmit={handleSubmit} className="mt-10 space-y-4">
+          <div className="space-y-1">
+            <label className="text-[10px] font-black uppercase tracking-widest text-slate-500">Full Name</label>
+            <input className="form-input" placeholder="John Doe" value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} required />
+          </div>
+          <div className="space-y-1">
+            <label className="text-[10px] font-black uppercase tracking-widest text-slate-500">Email Address</label>
+            <input className="form-input" type="email" placeholder="name@company.com" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} required />
+          </div>
+          <div className="space-y-1">
+            <label className="text-[10px] font-black uppercase tracking-widest text-slate-500">Security Key</label>
+            <input className="form-input" type="password" placeholder="••••••••" minLength="6" value={form.password} onChange={(event) => setForm({ ...form, password: event.target.value })} required />
+          </div>
+          <div className="space-y-1">
+            <label className="text-[10px] font-black uppercase tracking-widest text-slate-500">Workforce Role</label>
+            <select className="form-input" value={form.role} onChange={(event) => setForm({ ...form, role: event.target.value })}>
               <option value="member">Member</option>
               <option value="admin">Admin</option>
             </select>
-          </label>
-          <button className="btn-primary w-full" type="submit" disabled={loading}>
-            {loading ? "Creating account..." : "Signup"}
+          </div>
+          <button className="btn-primary mt-4 w-full" type="submit" disabled={loading}>
+            {loading ? "Initializing..." : "Create Mission Account"}
           </button>
         </form>
-        <p className="mt-6 text-center text-sm text-slate-600">
-          Already have an account? <Link className="font-semibold text-slate-950" to="/login">Login</Link>
+        
+        <p className="mt-8 text-center text-xs font-bold text-slate-500">
+          Already a member? <Link className="text-sky-400 hover:text-sky-300 underline-offset-4 hover:underline" to="/login">Access workspace</Link>
         </p>
       </section>
     </main>
