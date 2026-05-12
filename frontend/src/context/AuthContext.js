@@ -11,9 +11,7 @@ export const AuthProvider = ({ children }) => {
   });
 
   const request = useCallback(async (path, options = {}) => {
-    if (!API_URL) {
-      throw new Error("REACT_APP_API_URL is not configured");
-    }
+    const baseUrl = API_URL || "";
 
     const headers = {
       "Content-Type": "application/json",
@@ -22,7 +20,7 @@ export const AuthProvider = ({ children }) => {
 
     if (token) headers.Authorization = `Bearer ${token}`;
 
-    const response = await fetch(`${API_URL}${path}`, {
+    const response = await fetch(`${baseUrl}${path}`, {
       ...options,
       headers
     });
