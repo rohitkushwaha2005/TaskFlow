@@ -39,18 +39,42 @@ app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/tasks", taskRoutes);
 
+app.get("/api/test-db", async (req, res) => {
+  try {
+    await connectDB();
+    res.json({ 
+      status: "connected", 
+      readyState: mongoose.connection.readyState,
+      dbName: mongoose.connection.name 
+    });
+  } catch (err) {
+    res.status(500).json({ status: "error", message: err.message });
+  }
+});
+
 app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });
 });
 
 app.use((error, req, res, next) => {
-  res.status(500).json({ message: "Unexpected server error", error: error.message });
+  console.error("Server Error:", error.message);
+  res.status(500).json({ 
+    message: "Unexpected server error", 
+    error: error.message,
+    stack: process.env.NODE_ENV === 'production' ? null : error.stack
+  });
 });
 
 const connectDB = async () => {
   if (mongoose.connection.readyState >= 1) return;
+  if (!process.env.MONGODB_URI) {
+    throw new Error("MONGODB_URI environment variable is not defined");
+  }
   try {
-    await mongoose.connect(process.env.MONGODB_URI);
+    await mongoose.connect(process.env.MONGODB_URI, {
+      serverSelectionTimeoutMS: 10000, // 10 seconds timeout
+      connectTimeoutMS: 10000
+    });
     console.log("MongoDB Connected");
   } catch (error) {
     console.error("Database connection error:", error.message);
